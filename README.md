@@ -1,6 +1,8 @@
 # Better Text Machine
 
-A dependency-free writing assistant for revising rough or AI-assisted drafts into clearer, more personal, better sourced writing.
+A responsible document revision tool for source-aware, personal, and transparent writing.
+
+Better Text Machine is a dependency-free writing assistant for revising rough or AI-assisted drafts into clearer, more personal, better sourced writing.
 
 It helps writers:
 
