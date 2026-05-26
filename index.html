@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; worker-src 'self' blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; connect-src 'self' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; img-src 'self' data: blob:; font-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none';">
+    <meta name="referrer" content="no-referrer">
+    <title>Better Text Machine</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body class="gate-locked">
+    <section id="peekabooGate" class="peekaboo-gate" aria-labelledby="gateTitle">
+      <div class="gate-card">
+        <p class="eyebrow">Peekaboo panel</p>
+        <h1 id="gateTitle">Who goes there?</h1>
+        <form id="gateForm" class="gate-form">
+          <label for="gateName">Name</label>
+          <div class="gate-row">
+            <input id="gateName" type="text" autocomplete="name" placeholder="Enter your name">
+            <button class="icon-button" type="submit">Enter</button>
+          </div>
+          <p id="gateMessage" class="gate-message" role="status" aria-live="polite">The machine is peeking.</p>
+        </form>
+      </div>
+    </section>
+
+    <main class="app-shell">
+      <section class="workspace" aria-labelledby="app-title">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Transparent writing assistant</p>
+            <h1 id="app-title">Better Text Machine</h1>
+          </div>
+          <div class="ethics-note">
+            <strong>Built for authentic revision.</strong>
+            <span>It helps you clarify, personalize, cite, and disclose work responsibly.</span>
+            <button id="lockGate" class="gate-lock-button" type="button">Lock Gate</button>
+          </div>
+        </header>
+
+        <section class="document-grid" aria-label="Document import and writer instructions">
+          <div class="panel upload-panel">
+            <div class="panel-head compact">
+              <div>
+                <h2>Document</h2>
+              </div>
+              <span id="fileStatus" class="file-status">No file loaded</span>
+            </div>
+            <label class="file-drop" for="documentUpload">
+              <input id="documentUpload" type="file" accept=".txt,.md,.markdown,.pdf,.doc,.docx,application/pdf,text/plain,text/markdown">
+              <span>Choose PDF, Word, Markdown, or text</span>
+            </label>
+          </div>
+
+          <div class="panel instruction-panel">
+            <div class="panel-head compact">
+              <div>
+                <h2>Your Suggestions</h2>
+              </div>
+              <button id="clearSuggestions" class="ghost-button" type="button">Clear</button>
+            </div>
+            <textarea id="userSuggestions" class="suggestion-input" spellcheck="true" placeholder="Add required changes, one per line. Example: include my internship example, make the tone warmer, mention the privacy concern, add a citation for the statistic."></textarea>
+          </div>
+        </section>
+
+        <section class="editor-grid" aria-label="Writing assistant workspace">
+          <div class="panel input-panel">
+            <div class="panel-head">
+              <div>
+                <h2>Draft</h2>
+              </div>
+              <button id="sampleButton" class="ghost-button" type="button">Load Sample</button>
+            </div>
+            <textarea id="draftInput" spellcheck="true" placeholder="Paste your draft here..."></textarea>
+            <div class="metrics" aria-label="Draft metrics">
+              <span id="wordCount">0 words</span>
+              <span id="sentenceCount">0 sentences</span>
+              <span id="genericCount">0 generic phrases</span>
+            </div>
+          </div>
+
+          <div class="panel output-panel">
+            <div class="panel-head">
+              <div>
+                <h2>Revision</h2>
+              </div>
+              <div class="button-row">
+                <button id="cleanPrompts" class="icon-button" type="button" title="Remove guidance prompts" aria-label="Remove guidance prompts">Clean</button>
+                <button id="saveVersion" class="icon-button" type="button" title="Save revision version" aria-label="Save revision version">Save</button>
+                <button id="copyRevision" class="icon-button" type="button" title="Copy revision" aria-label="Copy revision">Copy</button>
+                <button id="exportWord" class="icon-button" type="button" title="Export Word document" aria-label="Export Word document">Word</button>
+                <button id="exportPdf" class="icon-button" type="button" title="Print or save as PDF" aria-label="Print or save as PDF">PDF</button>
+                <button id="downloadChecklist" class="icon-button" type="button" title="Download checklist" aria-label="Download checklist">List</button>
+              </div>
+            </div>
+            <div id="revisionOutput" class="revision-output" contenteditable="true" tabindex="0" aria-live="polite"></div>
+          </div>
+        </section>
+
+        <section class="review-grid" aria-label="Revision guidance">
+          <div class="panel">
+            <h2>Focus</h2>
+            <div class="focus-controls" role="group" aria-label="Revision focus">
+              <label><input type="checkbox" id="clarityToggle" checked> Clarity</label>
+              <label><input type="checkbox" id="personalToggle" checked> Personal examples</label>
+              <label><input type="checkbox" id="citationToggle" checked> Citation checks</label>
+              <label><input type="checkbox" id="transitionToggle" checked> Transitions</label>
+            </div>
+          </div>
+
+          <div class="panel">
+            <h2>Needs Attention</h2>
+            <ul id="flagsList" class="guidance-list"></ul>
+          </div>
+
+          <div class="panel">
+            <h2>Stronger Moves</h2>
+            <ul id="suggestionsList" class="guidance-list"></ul>
+          </div>
+
+          <div class="panel checklist-panel">
+            <div class="panel-head compact">
+              <div>
+                <h2>Revision Checklist</h2>
+              </div>
+              <button id="resetChecks" class="ghost-button" type="button">Reset</button>
+            </div>
+            <ul id="checklist" class="checklist"></ul>
+          </div>
+        </section>
+
+        <section class="integrity-grid" aria-label="Integrity review">
+          <div class="panel score-panel">
+            <h2>Trust Score</h2>
+            <div class="score-ring" id="trustScore"></div>
+            <ul id="trustList" class="guidance-list"></ul>
+          </div>
+
+          <div class="panel score-panel">
+            <h2>Suggestion Compliance</h2>
+            <div class="score-ring" id="complianceScore"></div>
+            <ul id="complianceList" class="guidance-list"></ul>
+          </div>
+
+          <div class="panel">
+            <h2>Suggestion Actions</h2>
+            <ul id="suggestionActions" class="action-list"></ul>
+          </div>
+
+          <div class="panel">
+            <h2>Claim Map</h2>
+            <ul id="claimMap" class="guidance-list compact-list"></ul>
+          </div>
+
+          <div class="panel wide-panel">
+            <h2>Source Tracker</h2>
+            <div id="sourceTracker" class="source-tracker"></div>
+          </div>
+
+          <div class="panel wide-panel">
+            <h2>Personalization Gaps</h2>
+            <ul id="personalizationGaps" class="guidance-list compact-list"></ul>
+            <div id="evidenceBuilder" class="evidence-builder"></div>
+          </div>
+
+          <div class="panel">
+            <h2>Do Not Invent Facts Audit</h2>
+            <ul id="factAudit" class="guidance-list compact-list"></ul>
+          </div>
+
+          <div class="panel wide-panel">
+            <h2>Before / After Diff</h2>
+            <div id="diffView" class="diff-view" aria-live="polite"></div>
+          </div>
+
+          <div class="panel wide-panel">
+            <h2>Citation-Needed Heatmap</h2>
+            <div id="citationHeatmap" class="heatmap" aria-live="polite"></div>
+          </div>
+
+          <div class="panel wide-panel">
+            <div class="panel-head compact">
+              <div>
+                <h2>Revision History</h2>
+              </div>
+              <button id="clearHistory" class="ghost-button" type="button">Clear</button>
+            </div>
+            <ul id="historyList" class="history-list"></ul>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
